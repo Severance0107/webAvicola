@@ -5,7 +5,7 @@ import '../styles/AuthLayout.css'
 const AuthLayout = () => {
   return (
         <main className="fondo container flex md:flex justify-center pt-2 ">
-          <div className='flex flex-col items-center'>
+          <div className='w-full'>
             <Outlet/>
           </div>
         </main>

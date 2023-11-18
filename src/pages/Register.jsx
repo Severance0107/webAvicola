@@ -1,36 +1,91 @@
 import React, { useState } from "react";
-import "../styles/Auth.css";
 import logo from "../assets/images/LogoPlataforma.png";
+import { Link } from "react-router-dom";
 
 export default function Register() {
+  const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
+  const [telefono, setTelefono] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log({ email, password });
+    console.log({ nombre, appelido, email, password, telefono, confirmPassword });
   };
 
   return (
-    <>
+    <div className="flex flex-col w-full items-center">
       <img className="logo" src={logo} />
       <form
-        className=" bg-stone-700 shadow-lg rounded-md py-10 px-20"
+        className=" bg-stone-700 shadow-lg rounded-md pt-5 mb-10 px-10 w-1/2"
         onSubmit={handleSubmit}
       >
         <div className="my-5">
           <label
-            htmlFor="email"
-            className="uppercase text-zinc-50 block text-xl font-bold"
+            htmlFor="nombre"
+            className="uppercase text-zinc-50 block text-lg font-bold"
           >
-            Email
+            Nombre
+          </label>
+          <input
+            id="nombre"
+            type="text"
+            placeholder="Tu nombre completo"
+            className="w-full mt-2 p-2 border rounded-md bg-gray-50"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+          />
+        </div>
+        
+        <div className="my-5">
+          <label
+            htmlFor="apellido"
+            className="uppercase text-zinc-50 block text-lg font-bold"
+          >
+            Apellido
+          </label>
+          <input
+            id="apellido"
+            type="text"
+            placeholder="Tu Apellido completo"
+            className="w-full mt-2 p-2 border rounded-md bg-gray-50"
+            value={apellido}
+            onChange={(e) => setApellido(e.target.value)}
+          />
+        </div>
+
+        <div className="my-5">
+          <label
+            htmlFor="telefono"
+            className="uppercase text-zinc-50 block text-lg font-bold"
+          >
+            Teléfono
+          </label>
+          <input
+            id="telefono"
+            type="number"
+            placeholder="Tu numero telefonico"
+            className="w-full mt-2 p-2 border rounded-md bg-gray-50"
+            value={telefono}
+            onChange={(e) => setTelefono(e.target.value)}
+          />
+        </div>
+        
+        <div className="my-5">
+          <label
+            htmlFor="email"
+            className="uppercase text-zinc-50 block text-lg font-bold"
+          >
+            Escribe tu email
           </label>
           <input
             id="email"
             type="email"
-            placeholder="Email de Registro"
-            className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+            placeholder="example@mail.com"
+            className="w-full mt-2 p-2 border rounded-md bg-gray-50"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -39,28 +94,61 @@ export default function Register() {
         <div className="my-5">
           <label
             htmlFor="password"
-            className="uppercase text-zinc-50 block text-xl font-bold"
+            className="uppercase text-zinc-50 block text-lg font-bold"
           >
             Contraseña
           </label>
           <input
             id="password"
             type="password"
-            placeholder="Contraseña"
-            className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+            placeholder="Escribe una Contraseña"
+            className="w-full mt-2 p-2 border rounded-md bg-gray-50"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <div className="flex justify-center">
+
+        <div className="my-5">
+          <label
+            htmlFor="passwordConfirm"
+            className="uppercase text-zinc-50 block text-lg font-bold"
+          >
+            Contraseña
+          </label>
+          <input
+            id="passwordConfirm"
+            type="password"
+            placeholder="Confirma la Contraseña"
+            className="w-full mt-2 p-2 border rounded-md bg-gray-50"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        </div>
+        
+        <div className="flex justify-center my-5">
           <button
-            className="bg-orange-500 text-zinc-50 p-3 rounded-md"
+            className="bg-orange-500 text-zinc-50 p-2 font-semibold text-lg rounded-md"
             type="submit"
           >
-            Iniciar Sesión
+            Registrarse
           </button>
         </div>
+        <nav className="lg:flex lg:justify-between my-3">
+          <Link
+            className="block text-center my-5 text-zinc-50 text-xs uppercase"
+            to="/"
+          >
+            ¿Ya tienes una cuenta? Inicia
+          </Link>
+          <Link
+            className="block text-center my-5 text-zinc-50 text-xs uppercase"
+            to="/pagos"
+          >
+            Cancela tu Factura
+          </Link>
+        </nav>
       </form>
-    </>
+
+    </div>
   );
 }

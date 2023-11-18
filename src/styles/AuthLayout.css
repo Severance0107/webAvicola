@@ -7,3 +7,9 @@
     background-repeat: no-repeat;
     background-size: cover;
 }
+
+.logo{
+    width: 200px;
+    height: auto;
+    background-image: url('../assets/images/LogoPlataforma.png');
+}
