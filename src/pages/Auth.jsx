@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import '../styles/Auth.css'
+import logo from '../assets/images/LogoPlataforma.png'
+import { Link } from "react-router-dom";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
@@ -6,18 +9,21 @@ export default function Auth() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    console.log({email, password})
   };
 
   return (
-    <div>
+    <>
+      <img className="logo" src={logo} />
       <form
-        className="my-10 bg-orange-600 shadow rounded-lg p-10"
+        className=" bg-stone-700 shadow-lg rounded-md pt-5 pb-10 px-20"
         onSubmit={handleSubmit}
       >
         <div className="my-5">
           <label
             htmlFor="email"
-            className="uppercase text-gray-600 block text-xl font-bold"
+            className="uppercase text-zinc-50 block text-xl font-bold"
           >
             Email
           </label>
@@ -30,7 +36,41 @@ export default function Auth() {
             onChange={e => setEmail(e.target.value)}
           />
         </div>
+
+        <div className="my-5">
+          <label
+            htmlFor="password"
+            className="uppercase text-zinc-50 block text-xl font-bold"
+          >
+            Contraseña
+          </label>
+          <input
+            id="password"
+            type="password"
+            placeholder="Contraseña"
+            className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
+        </div>
+        <div className="flex justify-center mt-5">
+          <button className="bg-orange-500 text-zinc-50 p-3 rounded-md" type="submit">Iniciar Sesión</button>
+        </div>
       </form>
-    </div>
+        <nav className="lg:flex lg:justify-between">
+        <Link
+          className="block text-center my-5 text-zinc-50 text-xs uppercase"
+          to="/registrar"
+        >
+          ¿No tienes una cuenta? Registrate
+        </Link>
+        <Link
+          className="block text-center my-5 text-zinc-50 text-xs uppercase"
+          to="/pagos"
+        >
+          Cancela tu Factura
+        </Link>
+      </nav>
+    </>
   );
 }

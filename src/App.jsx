@@ -5,6 +5,8 @@ import AuthLayout from './layouts/AuthLayout'
 import Auth from './pages/Auth'
 import RutaProtegida from './layouts/RutaProtegida'
 import Avicola from './pages/Avicola'
+import Register from './pages/Register'
+import Pagos from './pages/Pagos'
 
 function App() {
 
@@ -14,9 +16,11 @@ function App() {
         <Routes>
           <Route path='/' element={<AuthLayout />}>
             <Route index element={<Auth />}/>
+            <Route path='registrar' element={<Register/>}/>
+            <Route path='pagos' element={<Pagos />}/>
           </Route>
 
-          <Route path='/avicola' element={<RutaProtegida />}>
+          <Route path='/panel' element={<RutaProtegida />}>
             <Route index element={<Avicola />}/>
           </Route>
         </Routes>
