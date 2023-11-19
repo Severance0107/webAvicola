@@ -7,6 +7,7 @@ import RutaProtegida from './layouts/RutaProtegida'
 import Avicola from './pages/Avicola'
 import Register from './pages/Register'
 import Pagos from './pages/Pagos'
+import RespuestaPago from './pages/RespuestaPago'
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
             <Route index element={<Auth />}/>
             <Route path='registrar' element={<Register/>}/>
             <Route path='pagos' element={<Pagos />}/>
+            <Route path='/resPago' element={<RespuestaPago />}/>
           </Route>
 
           <Route path='/panel' element={<RutaProtegida />}>

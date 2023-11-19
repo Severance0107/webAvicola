@@ -1,7 +1,8 @@
 import React from "react";
 import useAuth from "../hooks/useAuth";
 
-export default function Factura() {
+export default function Factura({encriptado}) {
+  console.log(encriptado)
 
   const {siguientePaso} = useAuth()
 
@@ -182,12 +183,29 @@ export default function Factura() {
           <p className="text-zinc-50 block text-3xl font-bold">8'200.150</p>
         </div>
 
-        <button
+        <form method="post" action="https://sandbox.checkout.payulatam.com/ppp-web-gateway-payu/">
+          <input name="merchantId"      type="hidden"  value="1000213"   />
+          <input name="accountId"       type="hidden"  value="1008881" />
+          <input name="description"     type="hidden"  value="Pollos y gallinas"  />
+          <input name="referenceCode"   type="hidden"  value="NF01" />
+          <input name="amount"          type="hidden"  value="500"   />
+          <input name="tax"             type="hidden"  value="0" /> 
+          <input name="taxReturnBase"   type="hidden"  value="0" />
+          <input name="currency"        type="hidden"  value="COP" />
+          <input name="signature"       type="hidden"  value={encriptado}  />
+          <input name="test"            type="hidden"  value="1" />
+          <input name="buyerEmail"      type="hidden"  value="mdalvarez@ufpso.edu.co" />
+          <input name="responseUrl"     type="hidden"  value="http://localhost:5173/resPago" />
+          <input name="confirmationUrl" type="hidden"  value="http://192.168.1.39:3000/api/pagos/confirmacion" />
+          <input name="Submit" className="bg-orange-500 text-zinc-50 p-2 text-xl font-semibold rounded-md" type="submit"  value="Ir a Pagar" />
+        </form>
+
+        {/* <button
           className="bg-orange-500 text-zinc-50 p-2 text-xl font-semibold rounded-md"
           onClick={pagar}
         >
           Siguiente
-        </button>
+        </button> */}
       </div>
     </>
   );

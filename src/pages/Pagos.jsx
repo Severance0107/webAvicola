@@ -6,17 +6,22 @@ import Pasos from "../components/Pasos";
 import useAuth from "../hooks/useAuth";
 import DatosPagador from "../components/DatosPagador";
 import DatosMetodoPago from "../components/DatosMetodoPago";
+import clienteMongoAxios from "../config/clienteMongoAxios";
+import { data } from "autoprefixer";
 
 export default function Pagos() {
 
   const {pagoState} = useAuth()
   const [nFactura, setNFactura] = useState("");
   const [factura, setFactura] = useState({});
+  const [firma, setFirma] = useState("")
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(nFactura);
+    // console.log(nFactura);
+    const {data} = await clienteMongoAxios.get('/api/pagos/obtenerFirma')
+    setFirma(data.encriptado)
   };
 
 
@@ -86,15 +91,9 @@ export default function Pagos() {
                 <div className="p-10">
                   <Pasos />
                   {
-                    pagoState === 1 ? (
-                      <Factura factura={factura}/>
-                    ) : (
-                      pagoState === 2 ? (
-                        <DatosPagador />
-                      ) : (
-                        pagoState === 3 && (<DatosMetodoPago />)
-                      )
-                    )
+                    pagoState === 1 &&
+                      <Factura factura={factura} encriptado={firma}/>
+                    
                   }
                 </div>
               </main>
