@@ -1,28 +1,46 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+// import axios from "axios";
+import clienteMongoAxios from "../config/clienteMongoAxios";
 
 export default function DatosMetodoPago() {
   const [metodo, setMetodo] = useState("");
-  const [banco, setBanco] = useState("");
+  const [bancoSeleccionado, setBancoSeleccionado] = useState("");
 
-  const pagar = async () => {
-    const { data } = await axios.post('https://sandbox.api.payulatam.com/payments-api/4.0/service.cgi',
-      {
-        language: "es",
-        command: "GET_BANKS_LIST",
-        merchant: {
-          apiLogin: "pRRXKOl8ikMmt9u",
-          apiKey: "4Vj8eK4rloUd272L48hsrarnUA",
-        },
-        test: true,
-        bankListInformation: {
-          paymentMethod: "PSE",
-          paymentCountry: "CO",
-        },
-      }
-    );
+  const [ bancos, setBancos ] = useState([])
+  const [ metodos, setMetodos ] = useState([])
 
-    console.log(data);
+  useEffect(() => {
+    getMetodos();
+    getBancos();
+  },[])
+
+  const pagar = () => {
+    console.log('object')
+  }
+  
+  const getMetodos = async () => {
+    try {
+      const { data } = await clienteMongoAxios.get('/api/pagos/getMetodos');
+
+      const metodosColombia = data.paymentMethods.filter( method => {
+        return method.country === 'CO'
+      })
+      setMetodos(metodosColombia)
+    } catch (error) {
+      console.log(error)
+    }
+
+  };
+
+  const getBancos = async () => {
+
+    try {
+      const { data } = await clienteMongoAxios.get('/api/pagos/getPse');
+      setBancos(data.banks)
+    } catch (error) {
+      console.log(error)
+    }
+
   };
 
   return (
@@ -59,26 +77,39 @@ export default function DatosMetodoPago() {
             placeholder="Tipo de Persona"
             className="w-full mt-2 p-2 border rounded-md bg-gray-50"
             value={metodo}
-            onChange={(e) => setMetodo(e.target.value)}
+            onChange={(e) =>{ setMetodo(e.target.value); console.log(e.target.value) }}
           >
-            <option value="1">Natural</option>
-            <option value="2">Natural2</option>
+            {
+              metodos.map((metodoState, index) => (
+                <option key={index} value={metodoState.id}>{metodoState.description}</option>
+              ))
+            }
           </select>
         </div>
         <div className="w-6/12">
           <label htmlFor="Banco" className=" text-zinc-50 block text-lg ">
             Banco
           </label>
-          <select
-            id="Banco"
-            placeholder="Tipo de Persona"
-            className="w-full mt-2 p-2 border rounded-md bg-gray-50"
-            value={banco}
-            onChange={(e) => setBanco(e.target.value)}
-          >
-            <option value="1">Natural</option>
-            <option value="2">Natural2</option>
-          </select>
+
+            {
+              metodo === '254' && (
+
+                <select
+                id="Banco"
+                placeholder="Tipo de Persona"
+                className="w-full mt-2 p-2 border rounded-md bg-gray-50"
+                value={bancoSeleccionado}
+                onChange={(e) => setBancoSeleccionado(e.target.value)}
+                >
+                  {
+                    bancos.map(bancoState => (
+                      <option key={bancoState.id} value={bancoState.pseCode}>{bancoState.description}</option>
+                      ))
+                    }
+                </select>
+              )
+            }
+
         </div>
       </div>
 
