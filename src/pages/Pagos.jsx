@@ -2,8 +2,14 @@ import React, { useState } from "react";
 import logo from "../assets/images/LogoPlataforma.png";
 import { Link } from "react-router-dom";
 import Factura from "../components/Factura";
+import Pasos from "../components/Pasos";
+import useAuth from "../hooks/useAuth";
+import DatosPagador from "../components/DatosPagador";
+import DatosMetodoPago from "../components/DatosMetodoPago";
 
 export default function Pagos() {
+
+  const {pagoState} = useAuth()
   const [nFactura, setNFactura] = useState("");
   const [factura, setFactura] = useState({});
   
@@ -71,17 +77,34 @@ export default function Pagos() {
       </div>
 
       <div className="flex flex-col items-center justify-center bg-stone-700 w-9/12 mx-10 my-20 shadow-lg rounded-md">
-        <h1 className="text-4xl text-orange-500">Informacion de la factura</h1>
+        <h1 className="text-4xl text-orange-500">Informacion del Pago</h1>
 
         {
-          factura.item === null ? (
-            <Factura />
+          factura.item !== null ? (
+            <>
+              <main className="md:w-8/12 xl:w-3/4 2xl:w-4/5">
+                <div className="p-10">
+                  <Pasos />
+                  {
+                    pagoState === 1 ? (
+                      <Factura factura={factura}/>
+                    ) : (
+                      pagoState === 2 ? (
+                        <DatosPagador />
+                      ) : (
+                        pagoState === 3 && (<DatosMetodoPago />)
+                      )
+                    )
+                  }
+                </div>
+              </main>
+            </>
           ) : (
             <h1 className=" my-10 text-3xl text-zinc-50">Ingresa el numero de la factura</h1>
           )
         }
 
-        
+
       </div>
     </div>
   );

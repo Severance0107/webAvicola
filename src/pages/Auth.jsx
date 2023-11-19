@@ -1,16 +1,67 @@
 import React, { useState } from "react";
 import "../styles/Auth.css";
 import logo from "../assets/images/LogoPlataforma.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import clienteMongoAxios from "../config/clienteMongoAxios";
+import useAuth from "../hooks/useAuth";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Auth() {
+
+  const {setAuth, pagoState, setPagoState} = useAuth()
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log({ email, password });
+    if([email, password].includes("")){
+      toast.error('Los campos no pueden estar vacios', {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return
+    }
+
+    try {
+      const data = await clienteMongoAxios.post("/api/users/login", { email, password })
+      localStorage.setItem('token', data.data.data.session_token)
+      setAuth({token: data.data.data.session_token})
+
+      toast.success('Autenticado correctamente', {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+
+      navigate('/panel')
+    } catch (error) {
+      toast.error('Error de autenticacion', {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
   };
 
   return (
@@ -62,21 +113,22 @@ export default function Auth() {
           </button>
         </div>
 
-      <nav className="my-5">
-        <Link
-          className="block text-center my-5 text-zinc-50 text-xs uppercase"
-          to="/registrar"
-        >
-          ¿No tienes una cuenta? Registrate
-        </Link>
-        <Link
-          className="block text-center my-5 text-zinc-50 text-xs uppercase"
-          to="/pagos"
-        >
-          Cancela tu Factura
-        </Link>
-      </nav>
+        <nav className="my-5">
+          <Link
+            className="block text-center my-5 text-zinc-50 text-xs uppercase"
+            to="/registrar"
+          >
+            ¿No tienes una cuenta? Registrate
+          </Link>
+          <Link
+            className="block text-center my-5 text-zinc-50 text-xs uppercase"
+            to="/pagos"
+          >
+            Cancela tu Factura
+          </Link>
+        </nav>
       </form>
+      <ToastContainer />
     </div>
   );
 }

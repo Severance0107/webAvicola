@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import logo from "../assets/images/LogoPlataforma.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import clienteMongoAxios from "../config/clienteMongoAxios";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Register() {
   const [nombre, setNombre] = useState("");
@@ -9,11 +12,54 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
+  
+  const navigate = useNavigate()
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log({ nombre, appelido, email, password, telefono, confirmPassword });
+    if(password !== confirmPassword){
+      console.log('Las contraseñas no coindicen')
+      return
+    }
+
+    try {
+
+      const {data} = await clienteMongoAxios.post('/api/users/create', {name: nombre, lastname: apellido, phone: telefono, email, password})
+      
+      toast.success('Usuario creado', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+
+      setNombre('')
+      setApellido('')
+      setTelefono('')
+      setEmail('')
+      setPassword('')
+      setConfirmPassword('')
+
+      setTimeout(() => {
+        navigate('/')
+      }, 3000);
+      
+    } catch (error) {
+      toast.error('Error al registrar el usuario', {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
   };
 
   return (
@@ -148,7 +194,7 @@ export default function Register() {
           </Link>
         </nav>
       </form>
-
+      <ToastContainer />
     </div>
   );
 }

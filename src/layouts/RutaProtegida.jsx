@@ -9,7 +9,7 @@ const RutaProtegida = () => {
 
   return (
     <>
-      {auth.access_token ? (
+      {auth.token ? (
         <div >
           <Header />
           <div >
